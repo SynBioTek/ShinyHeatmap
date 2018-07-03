@@ -107,9 +107,9 @@ server <- function(input, output) {
                      #layout
                      margins =c(l=input$L,r=input$R,t=30,b=90),
                      srtCol=input$colAngle,
-                     
+                     # color schemes
                      col=colorpanel(15, low = input$lowColor, high = input$highColor),
-                      col=greenred(75),
+                     #col=greenred(75),
                      #clustering
                      Rowv=T, #input$RowClust, 
                      Colv=T, #input$ColClust,
