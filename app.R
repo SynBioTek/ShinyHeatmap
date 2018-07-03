@@ -9,77 +9,46 @@ library(heatmaply)
 library(gplots) # for greenred colors
 
 ui <- dashboardPage(
-
-  dashboardHeader(title = "Welcome to Heatmap!"), 
-  
-  dashboardSidebar(
-    sidebarMenu(
+      dashboardHeader(title = "Welcome to Heatmap!"), 
+      dashboardSidebar(sidebarMenu(
       menuItem("Heatmap", tabName = "file", icon = icon("file")),
-      menuItem("Heatmap_Instructions", tabName = "intro")
-      
-               )), # end of sidebar and sidebarMenu
+      menuItem("Heatmap_Instructions", tabName = "intro"))), # end of sidebar and sidebarMenu
     
-  dashboardBody(
-    tabItems(
-      tabItem(tabName = "file",
-              fluidRow(
-                box(title = "", solidHeader = T,status = "primary",width = 3,
-                    fileInput("mydata", "File Input", multiple = F, placeholder = "Input excel file"),
-                          
-                           h5('Heatmap Parameters'),
+      dashboardBody(tabItems(tabItem(tabName = "file",
+      fluidRow(box(title = "", solidHeader = T,status = "primary",width = 3,
+      fileInput("mydata", "File Input", multiple = F, placeholder = "Input excel file"),
+      h5('Heatmap Parameters'),column(5,checkboxInput('Layout','Layout')),
+                    br(),hr(),column(5,checkboxInput('Clustering','Clustering')),
+                    br(),hr(),column(5,checkboxInput('HeatColors','Colors')),
+                    br(),hr(),conditionalPanel('input.Layout==true',
+                    br(), hr(),
+      h5("Heatmap Layout"),sliderInput("mapHeight", "Height", min = 400, max = 1000,value = 500),
+                           sliderInput("width", "Right Adjust", min = 500, max =900, value = 800),
+                           sliderInput("R","Left Adjust", min = 90, max =600, value = 450),
+                           sliderInput("L", "Row Adjust", min = 0, max =650, value = 80),
+                           numericInput("colAngle", "X label Angle", min = -360, max=360, value=-45)),
                            
-                           column(5,checkboxInput('Layout','Layout')),
-                    br(),hr(),
-                           column(5,checkboxInput('Clustering','Clustering')),
-                    br(),hr(),
-                           column(5,checkboxInput('HeatColors','Colors')),
-                    br(),hr(),
-                           
-                           conditionalPanel('input.Layout==true',
-                                            br(), hr(),
-                                            h5("Heatmap Layout"),
-                                            sliderInput("mapHeight", "Height", min = 400, max = 1000,value = 500),
-                                            sliderInput("width", "Right Adjust", min = 500, max =900, value = 800),
-                                            sliderInput("R", "Left Adjust", min = 90, max =600, value = 450),
-                                            sliderInput("L", "Row Adjust", min = 0, max =650, value = 80),
-                                            
-                                            numericInput("colAngle", "X label Angle", min = -360, max=360, value=-45)
-                                            #sliderInput("B", "Bottom Adjust", min = 0, max =900, value = 80),
-                                            #sliderInput("Ti", "Title adjust", min = 0, max =900, value = 80)
-                                           ),
-                    
-                  
-                           conditionalPanel('input.Clustering==true',
-                                            br(), hr(),
-                                             selectInput("Dendo", "Dendogram", choices = c("col", "row", "both", "none"), 
-                                                        selected ="both"),
-                                            
-                                            selectInput("seriation", "Seriation(ordering)", choices= c(OLO="OLO",GW="GW",Mean="mean",None="none"),
-                                                        selected = 'mean')
-                                            
-                                            
-                                            # selectInput("RowClust", "Row Clustering?", choices =c("TRUE", "FALSE"), selected = "TRUE" ),
-                                            # selectInput("ColClust", "Col Clustering?", choices =C(TRUE,FALSE), selected = TRUE )
-                                           ),
+      conditionalPanel('input.Clustering==true',
+                           br(), hr(),
+                           selectInput("Dendo", "Dendogram", choices = c("col", "row", "both", "none"),selected ="both"),
+                           selectInput("seriation", "Seriation(ordering)", choices= c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'mean')),
                           
-                            conditionalPanel('input.HeatColors==true',
-                                     selectInput("lowColor", "Low Value:", c("green", "white", "black","blue", "purple", "red", "orange", "yellow" )),
-                                     selectInput("highColor", "High Value:", c("red", "white", "black", "orange", "yellow", "green", "blue", "purple"))
-                                            )
+      conditionalPanel('input.HeatColors==true',
+                            selectInput("lowColor", "Low Value:", c("green", "white", "black","blue", "purple", "red", "orange", "yellow" )),
+                            selectInput("highColor", "High Value:", c("red", "white", "black", "orange", "yellow", "green", "blue", "purple")))
+                    # unable to get this working :( 
                     # ,br(),
                     # h5("Download Image as pdf"),
                     # downloadButton("download", label = "Download")
                     
-                     ),#end fileInput box, 
-                       box(title = "Your Heatmap!",solidHeader = T,status = "primary",width = 9,height = 1000,
-                           mainPanel(plotlyOutput("heatmap"))) # end heatmap box
-                )# end fluid row
-              ),# end file tabItem
+        ),#end fileInput box, 
+       box(title = "Your Heatmap!",solidHeader = T,status = "primary",width = 9,height = 1000,
+       mainPanel(plotlyOutput("heatmap"))
+        ) # end heatmap box
+        )# end fluid row
+        ),# end file tabItem
               
-      tabItem(
-        tabName = "intro",
-              fluidRow(
-                box(
+      tabItem(tabName = "intro",fluidRow(box(
                   h2("Welcome to Shiny Heatmap!"),
                   p("This is a basic app that can be utilized to visualize a representation of data in the form of 
                       a map or diagram in which data values are represented as colors.
@@ -103,11 +72,12 @@ ui <- dashboardPage(
                     hr(),
                     h4("Figure 2. Example output"),
                     img(src='heatmapExample.png', align = "left", width="400px", height="550px")
-                    ))# end of fluidRow
+                    )
+        )# end of fluidRow
         ) # end of intro tabItem
-      )# end of tabItems
-    ) # end of body
-) # end of dashboardPage
+        )# end of tabItems
+        ) # end of body
+        ) # end of dashboardPage
 
 server <- function(input, output) { 
   
