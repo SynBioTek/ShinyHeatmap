@@ -7,5 +7,5 @@ This is a basic app that can be utilized to visualize a representation of data i
               4)	None  
 What separates Shiny Heatmap from other heatmap applications is that it allows the user to control 
 layout parameters such as the height and width thus being able to accommodate large data sets.
-Try it out from withing R Studio by running 
+Try it out from within R Studio by running 
 > runGitHub("ShinyHeatmap", "SynBioTek")
