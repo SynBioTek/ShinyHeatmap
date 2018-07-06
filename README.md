@@ -9,3 +9,4 @@ What separates Shiny Heatmap from other heatmap applications is that it allows t
 layout parameters such as the height and width thus being able to accommodate large data sets.
 Try it out from within R Studio by running 
 > runGitHub("ShinyHeatmap", "SynBioTek")
+or visit <a> href=https://synbiotek.shinyapps.io/shinyheatmap/ <a/>
